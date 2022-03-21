@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+env:
+  REACT_APP_NFT_PORT_API_KEY: ${{ secrets.REACT_APP_NFT_PORT_API_KEY }}
+  REACT_APP_COVALENT_KEY: ${{ secrets.REACT_APP_COVALENT_KEY }}
+  REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: CI=false npm run build
+
+      - name: Deploy to Skynet
+        uses: SkynetLabs/deploy-to-skynet-action@v2.1.1
+        with:
+          upload-dir: build
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          portal-url: https://fileportal.org
+

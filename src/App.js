@@ -1,0 +1,38 @@
+import React, { useState } from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
+import { Layout } from 'antd';
+
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import Create from './components/Create';
+import ProjectDetails from './components/ProjectDetails';
+import { useWeb3Context } from './contexts/Web3ContextProvider';
+
+import './app.css';
+
+const { Content } = Layout;
+
+const App = () => {
+  return (
+    <Router>
+      <Layout className="app">
+        <Navbar />
+        <Content className="body">
+          <Switch>
+            <Route exact path="/home" component={Home} />
+            <Route exact path="/create" component={Create} />
+            <Route path="/project/:id" component={ProjectDetails} />
+            <Redirect to="/home" />
+          </Switch>
+        </Content>
+      </Layout>
+    </Router>
+  );
+};
+
+export default App;
